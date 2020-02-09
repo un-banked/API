@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "Unbanked - Meios de Pagamento",
+        "title": "Unbanked - API",
         "version": "1.0.0",
         "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras. Aqui não limitamos a sua criatividade.",
         "contact": {
@@ -16,7 +16,7 @@
         "x-logo": {
             "url": "https://i.imgur.com/FA3vEe6.png",
             "backgroundColor": "#333333",
-            "altText": "Petstore logo"
+            "altText": "Logo"
         }
     },
     "servers": [
