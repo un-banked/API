@@ -1,20 +1,16 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "Unbanked - API",
+        "title": "Unbanked - API de Integração",
         "version": "1.0.0",
-        "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras. Aqui não limitamos a sua criatividade.",
+        "description": "As APIs de integração da Unbanked permitem que os integradores utilizem toda gama de produtos financeiros disponibilizados pela Unbanked. Através de nossas APIs será possível acessar soluções de câmbio, crédito, meios de pagamento, investimentos e consórcio.\n\nNossas APIs:\n- [Meios de Pagamento](#tag/API-de-Meios-de-Pagamento)\n- Câmbio\n- Crédito\n- Investimento\n- Consórcio\n\nVocê também pode experimentar nossa API pelo SwaggerUI, através do link: http://docs.unbanked.com.br/swagger",
         "contact": {
             "name": "Unbanked Pagamentos LTDA",
             "url": "https://unbanked.com.br",
             "email": "suporte@unbanked.com.br"
         },
-        "license": {
-            "name": "Licença Proprietária",
-            "url": "https://unbanked.com.br/terms"
-        },
         "x-logo": {
-            "url": "https://i.imgur.com/FA3vEe6.png",
+            "url": "https://docs.unbanked.com.br/api-docs-logo.png",
             "backgroundColor": "#333333",
             "altText": "Logo"
         }
@@ -22,7 +18,7 @@
     "servers": [
         {
             "url": "https://us-central1-unbanked-beta.cloudfunctions.net/v1-index",
-            "description": "Sandbox"
+            "description": "Sandbox | Test Server"
         },
         {
             "url": "https://virtserver.swaggerhub.com/unbanked/unbanked-meios_de_pagamento/1.0.0",
@@ -484,6 +480,10 @@
             "description": "Essa sessão permite autenticar o parceiro na API bem como gerir credenciais.\n\nPara se registrar como parceiro Unbanked e receber seus dados de acesso a nossa API envie um e-mail para dev@unbanked.com.br."
         },
         {
+            "name": "API de Meios de Pagamento",
+            "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras. Aqui não limitamos a sua criatividade."
+        },
+        {
             "name": "Cartões",
             "description": "Essa sessão permite o gerenciamento de cartões e clientes dentro da plataforma da **un_banked**. A criação de transações de  e-commerce com cartões de crédito pode ser realizada através de 4 fluxos distintos. Cada fluxo é indicado para um modelo diferente de negócio. Veja abaixo cada um deles e escolha o modo no qual você se encaixa melhor.\n\n- **tokens descartáveis**: Indicado para os quem não possue as certificações de segurança necessárias para ter os dados de cartões de crédito/débito trafegando em seus servidores, a passagem dos dados do cartão para a API é realizada diretamente do navegador e/ou do aplicativo rodando na dispositivo móvel do comprador. Os tokens descartáveis só podem ser utilizados para uma única transação. Uma vez utilizado, descarta-se o token e nenhuma outra operação poderá ser realizada com o mesmo identificador.\n- **cartão padrão da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem um único cartão para compras futuras, modelo muito conhecido no e-commerce como One-Click Buy.\n- **outros cartões da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem não apenas um, mas vários cartões para compras futuras, permitindo a escolha de qual cartão ele prefere ser cobrado na hora da venda.\n- **cartão não tokenizado**: Indicado para os que possuem certificação PCI-DSS e desejam trabalhar num modelo de integração sem tokenização de cartões e nem associação com compradores.\n\n**Nunca, em nenhuma hipótese, armazene o código verificador e nem o número descriptografado do cartão do seu cliente. Além de proibido pelas normas internacionais de segurança da indústria de pagamentos com cartões, isso também gera uma brecha de segurança e, em caso de vazamento de informações, processos jurídicos e multas financeiras.**"
         }
@@ -504,6 +504,7 @@
         {
             "name": "Meios de Pagamento",
             "tags": [
+                "API de Meios de Pagamento",
                 "Cartões"
             ]
         }
