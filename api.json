@@ -1,360 +1,511 @@
----
-openapi: 3.0.2
-info:
-  title: Unbanked - Meios de Pagamento
-  version: 1.0.0
-  description: A presente API (Meios de Pagamento), visa empoderar o usuário com soluções
-    on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto
-    e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá
-    implementar soluções de pagamento para o seu Marketplace (confirgurando regras
-    de split personalizadas), criar novos produtos para sua fintech (possibilitado
-    a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com
-    funcionalidades financeiras. Aqui não limitamos a sua criatividade.
-  contact:
-    name: Unbanked Pagamentos LTDA
-    url: https://unbanked.com.br
-    email: suporte@unbanked.com.br
-  license:
-    name: Licença Proprietária
-    url: https://unbanked.com.br/terms
-  x-logo:
-    url: https://redocly.github.io/redoc/petstore-logo.png
-    backgroundColor: '#FFFFFF'
-    altText: Petstore logo
-servers:
-- url: https://us-central1-unbanked-beta.cloudfunctions.net/v1-index
-  description: Sandbox
-- url: https://virtserver.swaggerhub.com/unbanked/unbanked-meios_de_pagamento/1.0.0
-  description: SwaggerHub | Mock Server
-paths:
-  /v1:
-    get:
-      tags:
-      - Informações
-      responses:
-        "200":
-          content:
-            application/json:
-              examples:
-                Sucesso:
-                  value:
-                    name: unbanked-api
-                    env: sandbox
-                    version: "1"
-          description: Retorna as informações da API com sucesso.
-      security:
-      - {}
-      summary: Detalhes da API
-      description: "Retorna informações básicas da API, como nome, ambiente e versã\
-        o fazendo também uma checagem básica da saúde da API, com validação de status\
-        \ dos serviços e servidores.\r\n\r\nPara informações mais detalhadas recomendamos\
-        \ acessar nossas páginas de Status:\r\n\r\n[Simplificado](https://status.unbanked.com.br)\r\
-        \n\r\n[Detalhado](https://statuspage.freshping.io/8685-unbanked)"
-  /v1/auth/login:
-    description: ""
-    post:
-      requestBody:
-        content:
-          application/json:
-            examples:
-              Autenticação:
-                value:
-                  email: test@mail.com
-                  password: "123456"
-        required: true
-      tags:
-      - Autenticação
-      responses:
-        "202":
-          content:
-            application/json:
-              examples:
-                Sucesso:
-                  value:
-                    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjI1OTc0MmQyNjlhY2IzNWZiNjU3YzBjNGRkMmM3YjcyYWEzMTRiNTAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiZG1jr2xjY2FtIiwicGljdHVyZSI6Imh0dHBzOi8vYXBpLmFkb3JhYmxlLmlvL2F2YXRhcnMvNTAwLzMyODM2ODI0ODgzLnBuZyIsInpvb3BJRCI6IjkzMThhMDkxZWY3ZTQ4NWRiZjdhNjRkOGRiNDg4NzhlIiwidHlwZSI6ImluZGl2aWR1YWwiLCJyZXNvdXJjZSI6ImJ1eWVyIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3VuYmFua2VkLWJldGEiLCJhdWQiOiJ1bmJhbmtlZC1iZXRhIiwiYXV0aF90aW1lIjoxNTgwMjE3OTkzLCJ1c2VyX2lkIjoiS3hkaW1SM2R5T05aVzZFODR3T1pOWGtTczBJMiIsInN1YiI6Ikt4ZGltUjNkeU9OWlc2RTg0d09aTlhrZHMwSTIiLCJpYXQiOjE1ODAyMTc5OTMsImV4cCI6MTU4MDIyMTU5MywiZW1haWwiOiJkYW5pbG8ubW9yZWlyYTk0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImRhbmlsby5tb3JlaXJhOTRAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.D9bGNI2WZePxcX0ZGAMLjW8DkNkGaade_599uU1TWF4utt4h5pbDBBegBnH6N2VCROz7oxK9tl7uq7XLUGEYohmpntDdJ4X2uQyCwRfKkAOus-MDFDZnAtAr_s7XW7sTUYtpT9Wc3XuW2at9Ac_zhqDRwkfMMcVEVoflavKETYxHy2PrZ0tc4iUf8SsENEsqQCL3Ioa2al1j3CaX3MLhIXaWGrh7naUYyDD__h6flaie9ngi1ICD47z8ySSNUg_2Uce9qyxnNs5jv62kl0CAN_Xag8RbxRYr0kKOdOpaJYw-LouAb_hESMFSmHejhrdlolIbCpdh_f7uSGQ91LbSRA
-                    expirationTime: Tue, 28 Jan 2020 14:26:33 GMT
-                    authTime: Tue, 28 Jan 2020 13:26:33 GMT
-                    issuedAtTime: Tue, 28 Jan 2020 13:26:33 GMT
-          description: Loga o usuário na API e retorna um token de autenticação.
-      summary: Logar na API
-      description: 'Autentica um parceiro por meio de email e senha. Retorna um `token`
-        a ser usado em todos os requests restritos. O token expira em 1 (uma) hora.
-        O token retornado deve ser utilizado nos endpoints que requerem autentificação,
-        utilizando o header `x-unbanked-token`, desta forma: `x-unbanked-token: token`'
-  /v1/auth/reset-password:
-    description: ""
-    post:
-      requestBody:
-        content:
-          application/json:
-            examples:
-              E-mail para Recuperação:
-                value:
-                  email: test@mail.com
-        required: true
-      tags:
-      - Autenticação
-      responses:
-        "202":
-          content:
-            application/json:
-              examples:
-                Sucesso:
-                  value:
-                    message: Link to Reset Password Sent
-          description: Envia um e-mail para o usuário redefinir a sua senha.
-      summary: Recuperar Senha
-      description: Envia uma requisição para recuperação da senha do usuário. O e-mail
-        informado receberá, caso o usuário exista na base de dados, um e-mail com
-        um link para troca de senha.
-  /v1/cards/tokens:
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/card_data'
-        required: true
-      tags:
-      - Cartões
-      responses:
-        "201":
-          content:
-            application/json:
-              examples:
-                Sucesso:
-                  value:
-                    id: 420f9fa974bd4210a77783e94447d218
-                    resource: token
-                    used: false
-                    type: card
-                    card:
-                      id: 8f76c317f27b4cbd8247cc42d70618cd
-                      resource: card
-                      card_brand: Visa
-                      first4_digits: "4929"
-                      expiration_month: "9"
-                      expiration_year: "2020"
-                      holder_name: ZOOP SQUAD QA
-                      is_active: false
-                      is_valid: true
-                      is_verified: false
-                      fingerprint: 5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9
-                      verification_checklist:
-                        postal_code_check: unchecked
-                        security_code_check: unchecked
-                        address_line1_check: unchecked
-                      metadata: {}
-                      created_at: 2019-05-06T11:33:45+00:00
-                      updated_at: 2019-05-06T11:33:45+00:00
-                    created_at: 2019-05-06T11:33:45+00:00
-                    updated_at: 2019-05-06T11:33:45+00:00
-          description: Retorna o token criado.
-        "400":
-          content:
-            application/json:
-              examples:
-                Requisição Inválida:
-                  value:
-                    error:
-                      status: Bad Request
-                      status_code: 400
-                      type: invalid_request_error
-                      category: missing_required_param
-                      message: 'Missing required param: expiration_year. Please verify
-                        request parameters.'
-          description: Requisição inválida.
-        "401":
-          $ref: '#/components/responses/401_unauthorized'
-      security:
-      - Token: []
-      summary: Tokenizar um novo cartão
-      description: Cria um novo token de cartão, que poderá ser vinculado a um comprador
-        ou então utilizado diretamente (uma única vez).
-  /v1/cards:
-    get:
-      tags:
-      - Cartões
-      parameters:
-      - examples:
-          ID do Cartão:
-            value: '"02ec41795637446d805b6795b3b3331e"'
-        name: card_id
-        description: Identificador do cartão.
-        schema:
-          type: string
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              examples:
-                Cartão Tokenizado:
-                  value:
-                    id: 02ec41795637446d805b6795b3b3331e
-                    resource: card
-                    card_brand: Visa
-                    first4_digits: "4929"
-                    expiration_month: "9"
-                    expiration_year: "2020"
-                    holder_name: TESTER MCTEST
-                    is_active: true
-                    is_valid: true
-                    is_verified: false
-                    customer: 005846dadde34e28ba7b9fecfccc989a
-                    fingerprint: 5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9
-                    verification_checklist:
-                      postal_code_check: unchecked
-                      security_code_check: fail
-                      address_line1_check: unchecked
-                    metadata: {}
-                    created_at: 2019-05-06T12:39:27+00:00
-                    updated_at: 2019-05-06T12:39:34+00:00
-          description: Retorna os dados do cartão.
-        "401":
-          $ref: '#/components/responses/401_unauthorized'
-        "404":
-          $ref: '#/components/responses/404_not_found'
-      security:
-      - Token: []
-      summary: Recuperar dados de um cartão tokenizado
-      description: Recupera os dados de um cartão previamente tokenizado.
-    delete:
-      tags:
-      - Cartões
-      parameters:
-      - examples:
-          ID do Cartão:
-            value: '"02ec41795637446d805b6795b3b3331e"'
-        name: card_id
-        description: Identificador do cartão.
-        schema:
-          type: string
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              examples:
-                Cartão Deletado:
-                  value:
-                    id: 02ec41795637446d805b6795b3b3331e
-                    resource: card
-                    deleted: true
-          description: Cartão deletado com sucesso.
-        "401":
-          $ref: '#/components/responses/401_unauthorized'
-        "404":
-          $ref: '#/components/responses/404_not_found'
-      security:
-      - Token: []
-      summary: Remover um cartão previamente cadastrado
-      description: Remove permanentemente as informações de um cartão previamente
-        cadastrado.
-components:
-  schemas:
-    card_data:
-      title: Root Type for card_data
-      description: Dados do Cartão
-      type: object
-      properties:
-        holder_name:
-          description: Nome do portador, conforme impresso no cartão.
-          type: string
-        card_number:
-          description: Sequência de números que identificam o cartão.
-          type: string
-        security_code:
-          description: Código de segurança (também conhecido como cvv) do cartão.
-          type: string
-        expiration_month:
-          description: Mês de expiração do cartão.
-          type: string
-        expiration_year:
-          description: Ano de expiração do cartão, com 4 dígitos.
-          type: string
-      example:
-        holder_name: Test Tester
-        card_number: "4539003370725497"
-        security_code: "123"
-        expiration_month: "10"
-        expiration_year: "2025"
-  responses:
-    "401_unauthorized":
-      content:
-        application/json:
-          examples:
-            Sem Autorização:
-              value:
-                error:
-                  status: Unauthorized
-                  status_code: 401
-                  type: invalid_request_error
-                  category: authentication_required
-                  message: 'Gateway: No API key provided.'
-      description: Sem dados de autenticação.
-    "400_bad_request":
-      content:
-        application/json:
-          examples:
-            Requisição Inválida:
-              value:
-                error:
-                  status: Bad Request
-                  status_code: 400
-                  type: invalid_request_error
-                  category: missing_required_param
-                  message: 'Missing required param: X. Please verify request parameters.'
-      description: Requisição inválida.
-    "404_not_found":
-      content:
-        application/json:
-          examples:
-            Recurso não Encontrado:
-              value:
-                error:
-                  status: Not Found
-                  status_code: 404
-                  type: invalid_request_error
-                  category: resource_not_found
-                  message: Sorry, the resource you are trying to use does not exist
-                    or has been deleted.
-      description: Recurso não encontrado.
-  securitySchemes:
-    Token:
-      type: apiKey
-      description: Obtido através de autenticação do usuário utilizando-se de `email`
-        e `senha`.
-      name: x-unbanked-token
-      in: header
-tags:
-- name: Informações
-  description: Essa sessão retorna informações sobre a API e também permite a execução
-    de um "health check" dos serviços e servidores.
-- name: Autenticação
-  description: |-
-    Essa sessão permite autenticar o parceiro na API bem como gerir credenciais.
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Unbanked - API",
+        "version": "1.0.0",
+        "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras. Aqui não limitamos a sua criatividade.",
+        "contact": {
+            "name": "Unbanked Pagamentos LTDA",
+            "url": "https://unbanked.com.br",
+            "email": "suporte@unbanked.com.br"
+        },
+        "license": {
+            "name": "Licença Proprietária",
+            "url": "https://unbanked.com.br/terms"
+        },
+        "x-logo": {
+            "url": "https://i.imgur.com/FA3vEe6.png",
+            "backgroundColor": "#333333",
+            "altText": "Logo"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://us-central1-unbanked-beta.cloudfunctions.net/v1-index",
+            "description": "Sandbox"
+        },
+        {
+            "url": "https://virtserver.swaggerhub.com/unbanked/unbanked-meios_de_pagamento/1.0.0",
+            "description": "SwaggerHub | Mock Server"
+        }
+    ],
+    "paths": {
+        "/v1": {
+            "get": {
+                "tags": [
+                    "Informações"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Sucesso": {
+                                        "value": {
+                                            "name": "unbanked-api",
+                                            "env": "sandbox",
+                                            "version": "1"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna as informações da API com sucesso."
+                    }
+                },
+                "security": [
+                    {
 
-    Para se registrar como parceiro Unbanked e receber seus dados de acesso a nossa API envie um e-mail para dev@unbanked.com.br.
-- name: Cartões
-  description: |-
-    Essa sessão permite o gerenciamento de cartões e clientes dentro da plataforma da **un_banked**. A criação de transações de  e-commerce com cartões de crédito pode ser realizada através de 4 fluxos distintos. Cada fluxo é indicado para um modelo diferente de negócio. Veja abaixo cada um deles e escolha o modo no qual você se encaixa melhor.
+                    }
+                ],
+                "summary": "Detalhes da API",
+                "description": "Retorna informações básicas da API, como nome, ambiente e versão fazendo também uma checagem básica da saúde da API, com validação de status dos serviços e servidores.\r\n\r\nPara informações mais detalhadas recomendamos acessar nossas páginas de Status:\r\n\r\n[Simplificado](https://status.unbanked.com.br)\r\n\r\n[Detalhado](https://statuspage.freshping.io/8685-unbanked)"
+            }
+        },
+        "/v1/auth/login": {
+            "description": "",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "Autenticação": {
+                                    "value": {
+                                        "email": "test@mail.com",
+                                        "password": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Autenticação"
+                ],
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Sucesso": {
+                                        "value": {
+                                            "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjI1OTc0MmQyNjlhY2IzNWZiNjU3YzBjNGRkMmM3YjcyYWEzMTRiNTAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiZG1jr2xjY2FtIiwicGljdHVyZSI6Imh0dHBzOi8vYXBpLmFkb3JhYmxlLmlvL2F2YXRhcnMvNTAwLzMyODM2ODI0ODgzLnBuZyIsInpvb3BJRCI6IjkzMThhMDkxZWY3ZTQ4NWRiZjdhNjRkOGRiNDg4NzhlIiwidHlwZSI6ImluZGl2aWR1YWwiLCJyZXNvdXJjZSI6ImJ1eWVyIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3VuYmFua2VkLWJldGEiLCJhdWQiOiJ1bmJhbmtlZC1iZXRhIiwiYXV0aF90aW1lIjoxNTgwMjE3OTkzLCJ1c2VyX2lkIjoiS3hkaW1SM2R5T05aVzZFODR3T1pOWGtTczBJMiIsInN1YiI6Ikt4ZGltUjNkeU9OWlc2RTg0d09aTlhrZHMwSTIiLCJpYXQiOjE1ODAyMTc5OTMsImV4cCI6MTU4MDIyMTU5MywiZW1haWwiOiJkYW5pbG8ubW9yZWlyYTk0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImRhbmlsby5tb3JlaXJhOTRAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.D9bGNI2WZePxcX0ZGAMLjW8DkNkGaade_599uU1TWF4utt4h5pbDBBegBnH6N2VCROz7oxK9tl7uq7XLUGEYohmpntDdJ4X2uQyCwRfKkAOus-MDFDZnAtAr_s7XW7sTUYtpT9Wc3XuW2at9Ac_zhqDRwkfMMcVEVoflavKETYxHy2PrZ0tc4iUf8SsENEsqQCL3Ioa2al1j3CaX3MLhIXaWGrh7naUYyDD__h6flaie9ngi1ICD47z8ySSNUg_2Uce9qyxnNs5jv62kl0CAN_Xag8RbxRYr0kKOdOpaJYw-LouAb_hESMFSmHejhrdlolIbCpdh_f7uSGQ91LbSRA",
+                                            "expirationTime": "Tue, 28 Jan 2020 14:26:33 GMT",
+                                            "authTime": "Tue, 28 Jan 2020 13:26:33 GMT",
+                                            "issuedAtTime": "Tue, 28 Jan 2020 13:26:33 GMT"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Loga o usuário na API e retorna um token de autenticação."
+                    }
+                },
+                "summary": "Logar na API",
+                "description": "Autentica um parceiro por meio de email e senha. Retorna um `token` a ser usado em todos os requests restritos. O token expira em 1 (uma) hora. O token retornado deve ser utilizado nos endpoints que requerem autentificação, utilizando o header `x-unbanked-token`, desta forma: `x-unbanked-token: token`"
+            }
+        },
+        "/v1/auth/reset-password": {
+            "description": "",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "E-mail para Recuperação": {
+                                    "value": {
+                                        "email": "test@mail.com"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Autenticação"
+                ],
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Sucesso": {
+                                        "value": {
+                                            "message": "Link to Reset Password Sent"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Envia um e-mail para o usuário redefinir a sua senha."
+                    }
+                },
+                "summary": "Recuperar Senha",
+                "description": "Envia uma requisição para recuperação da senha do usuário. O e-mail informado receberá, caso o usuário exista na base de dados, um e-mail com um link para troca de senha."
+            }
+        },
+        "/v1/cards/tokens": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/card_data"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Cartões"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Sucesso": {
+                                        "value": {
+                                            "id": "420f9fa974bd4210a77783e94447d218",
+                                            "resource": "token",
+                                            "used": false,
+                                            "type": "card",
+                                            "card": {
+                                                "id": "8f76c317f27b4cbd8247cc42d70618cd",
+                                                "resource": "card",
+                                                "card_brand": "Visa",
+                                                "first4_digits": "4929",
+                                                "expiration_month": "9",
+                                                "expiration_year": "2020",
+                                                "holder_name": "ZOOP SQUAD QA",
+                                                "is_active": false,
+                                                "is_valid": true,
+                                                "is_verified": false,
+                                                "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                                                "verification_checklist": {
+                                                    "postal_code_check": "unchecked",
+                                                    "security_code_check": "unchecked",
+                                                    "address_line1_check": "unchecked"
+                                                },
+                                                "metadata": {
 
-    - **tokens descartáveis**: Indicado para os quem não possue as certificações de segurança necessárias para ter os dados de cartões de crédito/débito trafegando em seus servidores, a passagem dos dados do cartão para a API é realizada diretamente do navegador e/ou do aplicativo rodando na dispositivo móvel do comprador. Os tokens descartáveis só podem ser utilizados para uma única transação. Uma vez utilizado, descarta-se o token e nenhuma outra operação poderá ser realizada com o mesmo identificador.
-    - **cartão padrão da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem um único cartão para compras futuras, modelo muito conhecido no e-commerce como One-Click Buy.
-    - **outros cartões da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem não apenas um, mas vários cartões para compras futuras, permitindo a escolha de qual cartão ele prefere ser cobrado na hora da venda.
-    - **cartão não tokenizado**: Indicado para os que possuem certificação PCI-DSS e desejam trabalhar num modelo de integração sem tokenização de cartões e nem associação com compradores.
+                                                },
+                                                "created_at": "2019-05-06T11:33:45+00:00",
+                                                "updated_at": "2019-05-06T11:33:45+00:00"
+                                            },
+                                            "created_at": "2019-05-06T11:33:45+00:00",
+                                            "updated_at": "2019-05-06T11:33:45+00:00"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna o token criado."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Requisição Inválida": {
+                                        "value": {
+                                            "error": {
+                                                "status": "Bad Request",
+                                                "status_code": 400,
+                                                "type": "invalid_request_error",
+                                                "category": "missing_required_param",
+                                                "message": "Missing required param: expiration_year. Please verify request parameters."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Requisição inválida."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "Token": [
+                        ]
+                    }
+                ],
+                "summary": "Tokenizar um novo cartão",
+                "description": "Cria um novo token de cartão, que poderá ser vinculado a um comprador ou então utilizado diretamente (uma única vez)."
+            }
+        },
+        "/v1/cards": {
+            "get": {
+                "tags": [
+                    "Cartões"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "ID do Cartão": {
+                                "value": "\"02ec41795637446d805b6795b3b3331e\""
+                            }
+                        },
+                        "name": "card_id",
+                        "description": "Identificador do cartão.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Cartão Tokenizado": {
+                                        "value": {
+                                            "id": "02ec41795637446d805b6795b3b3331e",
+                                            "resource": "card",
+                                            "card_brand": "Visa",
+                                            "first4_digits": "4929",
+                                            "expiration_month": "9",
+                                            "expiration_year": "2020",
+                                            "holder_name": "TESTER MCTEST",
+                                            "is_active": true,
+                                            "is_valid": true,
+                                            "is_verified": false,
+                                            "customer": "005846dadde34e28ba7b9fecfccc989a",
+                                            "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                                            "verification_checklist": {
+                                                "postal_code_check": "unchecked",
+                                                "security_code_check": "fail",
+                                                "address_line1_check": "unchecked"
+                                            },
+                                            "metadata": {
 
-    **Nunca, em nenhuma hipótese, armazene o código verificador e nem o número descriptografado do cartão do seu cliente. Além de proibido pelas normas internacionais de segurança da indústria de pagamentos com cartões, isso também gera uma brecha de segurança e, em caso de vazamento de informações, processos jurídicos e multas financeiras.**
-x-tagGroups:
-- name: Introdução
-  tags:
-  - Informações
-- name: Autenticação
-  tags:
-  - Autenticação
-- name: Meios de Pagamento
-  tags:
-  - Cartões
+                                            },
+                                            "created_at": "2019-05-06T12:39:27+00:00",
+                                            "updated_at": "2019-05-06T12:39:34+00:00"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados do cartão."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    }
+                },
+                "security": [
+                    {
+                        "Token": [
+                        ]
+                    }
+                ],
+                "summary": "Recuperar dados de um cartão tokenizado",
+                "description": "Recupera os dados de um cartão previamente tokenizado."
+            },
+            "delete": {
+                "tags": [
+                    "Cartões"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "ID do Cartão": {
+                                "value": "\"02ec41795637446d805b6795b3b3331e\""
+                            }
+                        },
+                        "name": "card_id",
+                        "description": "Identificador do cartão.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Cartão Deletado": {
+                                        "value": {
+                                            "id": "02ec41795637446d805b6795b3b3331e",
+                                            "resource": "card",
+                                            "deleted": true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Cartão deletado com sucesso."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    }
+                },
+                "security": [
+                    {
+                        "Token": [
+                        ]
+                    }
+                ],
+                "summary": "Remover um cartão previamente cadastrado",
+                "description": "Remove permanentemente as informações de um cartão previamente cadastrado."
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "card_data": {
+                "title": "Root Type for card_data",
+                "description": "Dados do Cartão",
+                "type": "object",
+                "properties": {
+                    "holder_name": {
+                        "description": "Nome do portador, conforme impresso no cartão.",
+                        "type": "string"
+                    },
+                    "card_number": {
+                        "description": "Sequência de números que identificam o cartão.",
+                        "type": "string"
+                    },
+                    "security_code": {
+                        "description": "Código de segurança (também conhecido como cvv) do cartão.",
+                        "type": "string"
+                    },
+                    "expiration_month": {
+                        "description": "Mês de expiração do cartão.",
+                        "type": "string"
+                    },
+                    "expiration_year": {
+                        "description": "Ano de expiração do cartão, com 4 dígitos.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "holder_name": "Test Tester",
+                    "card_number": "4539003370725497",
+                    "security_code": "123",
+                    "expiration_month": "10",
+                    "expiration_year": "2025"
+                }
+            }
+        },
+        "responses": {
+            "401_unauthorized": {
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Sem Autorização": {
+                                "value": {
+                                    "error": {
+                                        "status": "Unauthorized",
+                                        "status_code": 401,
+                                        "type": "invalid_request_error",
+                                        "category": "authentication_required",
+                                        "message": "Gateway: No API key provided."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Sem dados de autenticação."
+            },
+            "400_bad_request": {
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Requisição Inválida": {
+                                "value": {
+                                    "error": {
+                                        "status": "Bad Request",
+                                        "status_code": 400,
+                                        "type": "invalid_request_error",
+                                        "category": "missing_required_param",
+                                        "message": "Missing required param: X. Please verify request parameters."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Requisição inválida."
+            },
+            "404_not_found": {
+                "content": {
+                    "application/json": {
+                        "examples": {
+                            "Recurso não Encontrado": {
+                                "value": {
+                                    "error": {
+                                        "status": "Not Found",
+                                        "status_code": 404,
+                                        "type": "invalid_request_error",
+                                        "category": "resource_not_found",
+                                        "message": "Sorry, the resource you are trying to use does not exist or has been deleted."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Recurso não encontrado."
+            }
+        },
+        "securitySchemes": {
+            "Token": {
+                "type": "apiKey",
+                "description": "Obtido através de autenticação do usuário utilizando-se de `email` e `senha`.",
+                "name": "x-unbanked-token",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Informações",
+            "description": "Essa sessão retorna informações sobre a API e também permite a execução de um \"health check\" dos serviços e servidores."
+        },
+        {
+            "name": "Autenticação",
+            "description": "Essa sessão permite autenticar o parceiro na API bem como gerir credenciais.\n\nPara se registrar como parceiro Unbanked e receber seus dados de acesso a nossa API envie um e-mail para dev@unbanked.com.br."
+        },
+        {
+            "name": "Cartões",
+            "description": "Essa sessão permite o gerenciamento de cartões e clientes dentro da plataforma da **un_banked**. A criação de transações de  e-commerce com cartões de crédito pode ser realizada através de 4 fluxos distintos. Cada fluxo é indicado para um modelo diferente de negócio. Veja abaixo cada um deles e escolha o modo no qual você se encaixa melhor.\n\n- **tokens descartáveis**: Indicado para os quem não possue as certificações de segurança necessárias para ter os dados de cartões de crédito/débito trafegando em seus servidores, a passagem dos dados do cartão para a API é realizada diretamente do navegador e/ou do aplicativo rodando na dispositivo móvel do comprador. Os tokens descartáveis só podem ser utilizados para uma única transação. Uma vez utilizado, descarta-se o token e nenhuma outra operação poderá ser realizada com o mesmo identificador.\n- **cartão padrão da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem um único cartão para compras futuras, modelo muito conhecido no e-commerce como One-Click Buy.\n- **outros cartões da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem não apenas um, mas vários cartões para compras futuras, permitindo a escolha de qual cartão ele prefere ser cobrado na hora da venda.\n- **cartão não tokenizado**: Indicado para os que possuem certificação PCI-DSS e desejam trabalhar num modelo de integração sem tokenização de cartões e nem associação com compradores.\n\n**Nunca, em nenhuma hipótese, armazene o código verificador e nem o número descriptografado do cartão do seu cliente. Além de proibido pelas normas internacionais de segurança da indústria de pagamentos com cartões, isso também gera uma brecha de segurança e, em caso de vazamento de informações, processos jurídicos e multas financeiras.**"
+        }
+    ],
+    "x-tagGroups": [
+        {
+            "name": "Introdução",
+            "tags": [
+                "Informações"
+            ]
+        },
+        {
+            "name": "Autenticação",
+            "tags": [
+                "Autenticação"
+            ]
+        },
+        {
+            "name": "Meios de Pagamento",
+            "tags": [
+                "Cartões"
+            ]
+        }
+    ]
+}
