@@ -3,7 +3,7 @@
     "info": {
         "title": "Unbanked - API de Integração",
         "version": "1.0.0",
-        "description": "As APIs de integração da Unbanked permitem que os integradores utilizem toda gama de produtos financeiros disponibilizados pela Unbanked. Através de nossas APIs será possível acessar soluções de câmbio, crédito, meios de pagamento, investimentos e consórcio.\n\nNossas APIs:\n- [Meios de Pagamento](#tag/API-de-Meios-de-Pagamento)\n- Câmbio\n- Crédito\n- Investimento\n- Consórcio\n\nVocê também pode experimentar nossa API pelo SwaggerUI, através do link: http://docs.unbanked.com.br/swagger",
+        "description": "As APIs de integração da Unbanked permitem que os integradores utilizem toda gama de produtos financeiros disponibilizados pela Unbanked. Através de nossas APIs será possível acessar soluções de câmbio, crédito, meios de pagamento, investimentos e consórcio.\n\nNossas APIs:\n- [Meios de Pagamento](https://docs.unbanked.com.br/#tag/API-de-Meios-de-Pagamento)\n- Câmbio\n- Crédito\n- Investimento\n- Consórcio\n\nVocê também pode experimentar nossa API pelo SwaggerUI, através do link: [http://docs.unbanked.com.br/swagger](http://docs.unbanked.com.br/swagger)",
         "contact": {
             "name": "Unbanked Pagamentos LTDA",
             "url": "https://unbanked.com.br",
@@ -19,10 +19,6 @@
         {
             "url": "https://us-central1-unbanked-beta.cloudfunctions.net/v1-index",
             "description": "Sandbox | Test Server"
-        },
-        {
-            "url": "https://virtserver.swaggerhub.com/unbanked/unbanked-meios_de_pagamento/1.0.0",
-            "description": "SwaggerHub | Mock Server"
         }
     ],
     "paths": {
@@ -35,6 +31,9 @@
                     "200": {
                         "content": {
                             "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/api_data"
+                                },
                                 "examples": {
                                     "Sucesso": {
                                         "value": {
@@ -64,6 +63,9 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/login_data"
+                            },
                             "examples": {
                                 "Autenticação": {
                                     "value": {
@@ -83,6 +85,9 @@
                     "202": {
                         "content": {
                             "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/token_data"
+                                },
                                 "examples": {
                                     "Sucesso": {
                                         "value": {
@@ -158,70 +163,14 @@
                     "Cartões"
                 ],
                 "responses": {
-                    "201": {
-                        "content": {
-                            "application/json": {
-                                "examples": {
-                                    "Sucesso": {
-                                        "value": {
-                                            "id": "420f9fa974bd4210a77783e94447d218",
-                                            "resource": "token",
-                                            "used": false,
-                                            "type": "card",
-                                            "card": {
-                                                "id": "8f76c317f27b4cbd8247cc42d70618cd",
-                                                "resource": "card",
-                                                "card_brand": "Visa",
-                                                "first4_digits": "4929",
-                                                "expiration_month": "9",
-                                                "expiration_year": "2020",
-                                                "holder_name": "ZOOP SQUAD QA",
-                                                "is_active": false,
-                                                "is_valid": true,
-                                                "is_verified": false,
-                                                "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
-                                                "verification_checklist": {
-                                                    "postal_code_check": "unchecked",
-                                                    "security_code_check": "unchecked",
-                                                    "address_line1_check": "unchecked"
-                                                },
-                                                "metadata": {
-
-                                                },
-                                                "created_at": "2019-05-06T11:33:45+00:00",
-                                                "updated_at": "2019-05-06T11:33:45+00:00"
-                                            },
-                                            "created_at": "2019-05-06T11:33:45+00:00",
-                                            "updated_at": "2019-05-06T11:33:45+00:00"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Retorna o token criado."
-                    },
-                    "400": {
-                        "content": {
-                            "application/json": {
-                                "examples": {
-                                    "Requisição Inválida": {
-                                        "value": {
-                                            "error": {
-                                                "status": "Bad Request",
-                                                "status_code": 400,
-                                                "type": "invalid_request_error",
-                                                "category": "missing_required_param",
-                                                "message": "Missing required param: expiration_year. Please verify request parameters."
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Requisição inválida."
-                    },
                     "401": {
                         "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    },
+                    "201": {
+                        "$ref": "#/components/responses/201_card_token_created"
                     }
                 },
                 "security": [
@@ -397,12 +346,371 @@
                     "expiration_month": "10",
                     "expiration_year": "2025"
                 }
+            },
+            "login_data": {
+                "title": "Root Type for login_data",
+                "description": "Dados de Login",
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "description": "E-mail do usuário na plataforma Unbanked.",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Senha do usuário na plataforma Unbanked.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "email": "you@mail.com",
+                    "password": "123456"
+                }
+            },
+            "token_data": {
+                "title": "Root Type for token_data",
+                "description": "Dados do Token",
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "description": "Token JWT utilizado para autenticar requisições.",
+                        "type": "string"
+                    },
+                    "expirationTime": {
+                        "description": "Data de expiração do token.",
+                        "type": "string"
+                    },
+                    "authTime": {
+                        "description": "Data de login do usuário.",
+                        "type": "string"
+                    },
+                    "issuedAtTime": {
+                        "description": "Data de emissão do token.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjI1OTc0MmQyNjlhY2IzNWZiNjU3YzBjNGRkMmM3YjcyYWEzMTRiNTAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiZG1jr2xjY2FtIiwicGljdHVyZSI6Imh0dHBzOi8vYXBpLmFkb3JhYmxlLmlvL2F2YXRhcnMvNTAwLzMyODM2ODI0ODgzLnBuZyIsInpvb3BJRCI6IjkzMThhMDkxZWY3ZTQ4NWRiZjdhNjRkOGRiNDg4NzhlIiwidHlwZSI6ImluZGl2aWR1YWwiLCJyZXNvdXJjZSI6ImJ1eWVyIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3VuYmFua2VkLWJldGEiLCJhdWQiOiJ1bmJhbmtlZC1iZXRhIiwiYXV0aF90aW1lIjoxNTgwMjE3OTkzLCJ1c2VyX2lkIjoiS3hkaW1SM2R5T05aVzZFODR3T1pOWGtTczBJMiIsInN1YiI6Ikt4ZGltUjNkeU9OWlc2RTg0d09aTlhrZHMwSTIiLCJpYXQiOjE1ODAyMTc5OTMsImV4cCI6MTU4MDIyMTU5MywiZW1haWwiOiJkYW5pbG8ubW9yZWlyYTk0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImRhbmlsby5tb3JlaXJhOTRAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.D9bGNI2WZePxcX0ZGAMLjW8DkNkGaade_599uU1TWF4utt4h5pbDBBegBnH6N2VCROz7oxK9tl7uq7XLUGEYohmpntDdJ4X2uQyCwRfKkAOus-MDFDZnAtAr_s7XW7sTUYtpT9Wc3XuW2at9Ac_zhqDRwkfMMcVEVoflavKETYxHy2PrZ0tc4iUf8SsENEsqQCL3Ioa2al1j3CaX3MLhIXaWGrh7naUYyDD__h6flaie9ngi1ICD47z8ySSNUg_2Uce9qyxnNs5jv62kl0CAN_Xag8RbxRYr0kKOdOpaJYw-LouAb_hESMFSmHejhrdlolIbCpdh_f7uSGQ91LbSRA",
+                    "expirationTime": "Tue, 28 Jan 2020 14:26:33 GMT",
+                    "authTime": "Tue, 28 Jan 2020 13:26:33 GMT",
+                    "issuedAtTime": "Tue, 28 Jan 2020 13:26:33 GMT"
+                }
+            },
+            "api_data": {
+                "title": "Root Type for api_data",
+                "description": "Dados da API",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Nome da API.",
+                        "type": "string"
+                    },
+                    "env": {
+                        "description": "Ambiente de execução da API.",
+                        "type": "string"
+                    },
+                    "version": {
+                        "description": "Versão da API.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "unbanked-api",
+                    "env": "sandbox",
+                    "version": "1"
+                }
+            },
+            "error_data": {
+                "title": "Root Type for error_data",
+                "description": "Dados de um erro.",
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "description": "Código de status de erro.",
+                        "type": "string"
+                    },
+                    "status_code": {
+                        "format": "int32",
+                        "description": "Status de erro.",
+                        "type": "integer"
+                    },
+                    "type": {
+                        "description": "Tipo de erro.",
+                        "type": "string"
+                    },
+                    "category": {
+                        "description": "Categoria de erro.",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "Mensagem de erro.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "status": "Bad Request",
+                    "status_code": 400,
+                    "type": "invalid_request_error",
+                    "category": "missing_required_param",
+                    "message": "Missing required param: expiration_year. Please verify request parameters."
+                }
+            },
+            "error_object_data": {
+                "title": "Root Type for 404_bad_request_data",
+                "description": "Dados de uma requisição inválida.",
+                "required": [
+                ],
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/error_data",
+                        "description": "Objeto contendo os detalhes do erro.",
+                        "properties": {
+                            "status": {
+                                "type": "string"
+                            },
+                            "status_code": {
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "category": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "error": {
+                        "status": "Bad Request",
+                        "status_code": 400,
+                        "type": "invalid_request_error",
+                        "category": "missing_required_param",
+                        "message": "Missing required param: expiration_year. Please verify request parameters."
+                    }
+                }
+            },
+            "card_token_data": {
+                "title": "Root Type for card_token_data",
+                "description": "Dados de um token de cartão.",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "resource": {
+                        "type": "string"
+                    },
+                    "used": {
+                        "type": "boolean"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "card": {
+                        "$ref": "#/components/schemas/card_status_data",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "resource": {
+                                "type": "string"
+                            },
+                            "card_brand": {
+                                "type": "string"
+                            },
+                            "first4_digits": {
+                                "type": "string"
+                            },
+                            "expiration_month": {
+                                "type": "string"
+                            },
+                            "expiration_year": {
+                                "type": "string"
+                            },
+                            "holder_name": {
+                                "type": "string"
+                            },
+                            "is_active": {
+                                "type": "boolean"
+                            },
+                            "is_valid": {
+                                "type": "boolean"
+                            },
+                            "is_verified": {
+                                "type": "boolean"
+                            },
+                            "fingerprint": {
+                                "type": "string"
+                            },
+                            "verification_checklist": {
+                                "type": "object",
+                                "properties": {
+                                    "postal_code_check": {
+                                        "type": "string"
+                                    },
+                                    "security_code_check": {
+                                        "type": "string"
+                                    },
+                                    "address_line1_check": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "metadata": {
+                                "type": "object"
+                            },
+                            "created_at": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "updated_at": {
+                                "format": "date-time",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "420f9fa974bd4210a77783e94447d218",
+                    "resource": "token",
+                    "used": false,
+                    "type": "card",
+                    "card": {
+                        "id": "8f76c317f27b4cbd8247cc42d70618cd",
+                        "resource": "card",
+                        "card_brand": "Visa",
+                        "first4_digits": "4929",
+                        "expiration_month": "9",
+                        "expiration_year": "2020",
+                        "holder_name": "ZOOP SQUAD QA",
+                        "is_active": false,
+                        "is_valid": true,
+                        "is_verified": false,
+                        "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                        "verification_checklist": {
+                            "postal_code_check": "unchecked",
+                            "security_code_check": "unchecked",
+                            "address_line1_check": "unchecked"
+                        },
+                        "metadata": {
+
+                        },
+                        "created_at": "2019-05-06T11:33:45+00:00",
+                        "updated_at": "2019-05-06T11:33:45+00:00"
+                    },
+                    "created_at": "2019-05-06T11:33:45+00:00",
+                    "updated_at": "2019-05-06T11:33:45+00:00"
+                }
+            },
+            "card_status_data": {
+                "title": "Root Type for card_status_data",
+                "description": "Dados de status de cartão.",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "resource": {
+                        "type": "string"
+                    },
+                    "card_brand": {
+                        "type": "string"
+                    },
+                    "first4_digits": {
+                        "type": "string"
+                    },
+                    "expiration_month": {
+                        "type": "string"
+                    },
+                    "expiration_year": {
+                        "type": "string"
+                    },
+                    "holder_name": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "is_valid": {
+                        "type": "boolean"
+                    },
+                    "is_verified": {
+                        "type": "boolean"
+                    },
+                    "fingerprint": {
+                        "type": "string"
+                    },
+                    "verification_checklist": {
+                        "type": "object",
+                        "properties": {
+                            "postal_code_check": {
+                                "type": "string"
+                            },
+                            "security_code_check": {
+                                "type": "string"
+                            },
+                            "address_line1_check": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "metadata": {
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "8f76c317f27b4cbd8247cc42d70618cd",
+                    "resource": "card",
+                    "card_brand": "Visa",
+                    "first4_digits": "4929",
+                    "expiration_month": "9",
+                    "expiration_year": "2020",
+                    "holder_name": "ZOOP SQUAD QA",
+                    "is_active": false,
+                    "is_valid": true,
+                    "is_verified": false,
+                    "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                    "verification_checklist": {
+                        "postal_code_check": "unchecked",
+                        "security_code_check": "unchecked",
+                        "address_line1_check": "unchecked"
+                    },
+                    "metadata": {
+
+                    },
+                    "created_at": "2019-05-06T11:33:45+00:00",
+                    "updated_at": "2019-05-06T11:33:45+00:00"
+                }
             }
         },
         "responses": {
             "401_unauthorized": {
                 "content": {
                     "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/error_object_data"
+                        },
                         "examples": {
                             "Sem Autorização": {
                                 "value": {
@@ -423,6 +731,9 @@
             "400_bad_request": {
                 "content": {
                     "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/error_object_data"
+                        },
                         "examples": {
                             "Requisição Inválida": {
                                 "value": {
@@ -459,6 +770,51 @@
                     }
                 },
                 "description": "Recurso não encontrado."
+            },
+            "201_card_token_created": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/card_token_data"
+                        },
+                        "examples": {
+                            "card_token_example": {
+                                "value": {
+                                    "id": "420f9fa974bd4210a77783e94447d218",
+                                    "resource": "token",
+                                    "used": false,
+                                    "type": "card",
+                                    "card": {
+                                        "id": "8f76c317f27b4cbd8247cc42d70618cd",
+                                        "resource": "card",
+                                        "card_brand": "Visa",
+                                        "first4_digits": "4929",
+                                        "expiration_month": "9",
+                                        "expiration_year": "2020",
+                                        "holder_name": "ZOOP SQUAD QA",
+                                        "is_active": false,
+                                        "is_valid": true,
+                                        "is_verified": false,
+                                        "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                                        "verification_checklist": {
+                                            "postal_code_check": "unchecked",
+                                            "security_code_check": "unchecked",
+                                            "address_line1_check": "unchecked"
+                                        },
+                                        "metadata": {
+
+                                        },
+                                        "created_at": "2019-05-06T11:33:45+00:00",
+                                        "updated_at": "2019-05-06T11:33:45+00:00"
+                                    },
+                                    "created_at": "2019-05-06T11:33:45+00:00",
+                                    "updated_at": "2019-05-06T11:33:45+00:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Retorna o token criado."
             }
         },
         "securitySchemes": {
@@ -473,7 +829,7 @@
     "tags": [
         {
             "name": "Informações",
-            "description": "Essa sessão retorna informações sobre a API e também permite a execução de um \"health check\" dos serviços e servidores."
+            "description": "Essa sessão retorna informações sobre a API e também executa um \"health check\" dos serviços e servidores da Unbanked."
         },
         {
             "name": "Autenticação",
@@ -481,7 +837,7 @@
         },
         {
             "name": "API de Meios de Pagamento",
-            "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos. Através de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras. Aqui não limitamos a sua criatividade."
+            "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos.\n\nAtravés de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras.\n\nAqui não limitamos a sua criatividade!"
         },
         {
             "name": "Cartões",
