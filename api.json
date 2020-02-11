@@ -3,7 +3,7 @@
     "info": {
         "title": "Unbanked - API de Integração",
         "version": "1.0.0",
-        "description": "As APIs de integração da Unbanked permitem que os integradores utilizem toda gama de produtos financeiros disponibilizados pela Unbanked. Através de nossas APIs será possível acessar soluções de câmbio, crédito, meios de pagamento, investimentos e consórcio.\n\nNossas APIs:\n- [Meios de Pagamento](https://docs.unbanked.com.br/#tag/API-de-Meios-de-Pagamento)\n- Câmbio\n- Crédito\n- Investimento\n- Consórcio\n\nVocê também pode experimentar nossa API pelo SwaggerUI, através do link: [http://docs.unbanked.com.br/swagger](http://docs.unbanked.com.br/swagger)",
+        "description": "As APIs de integração da Unbanked permitem que os integradores utilizem toda gama de produtos financeiros disponibilizados pela Unbanked. Através de nossas APIs será possível acessar soluções de câmbio, crédito, meios de pagamento, investimentos e consórcio.\n\nNossas APIs:\n- [Meios de Pagamento](https://docs.unbanked.com.br/#tag/API-de-Meios-de-Pagamento)\n- Câmbio\n- Crédito\n- Investimento\n- Consórcio\n \n---\n\nLinks:\n\n* [Documentação](https://docs.unbanked.com.br)\n\n* [SwaggerUI](https://docs.unbanked.com.br/swagger)\n\n* [OpenAPI JSON](https://docs.unbanked.com.br/api.json)",
         "contact": {
             "name": "Unbanked Pagamentos LTDA",
             "url": "https://unbanked.com.br",
@@ -163,14 +163,14 @@
                     "Cartões"
                 ],
                 "responses": {
-                    "401": {
-                        "$ref": "#/components/responses/401_unauthorized"
+                    "201": {
+                        "$ref": "#/components/responses/201_card_token_created"
                     },
                     "400": {
                         "$ref": "#/components/responses/400_bad_request"
                     },
-                    "201": {
-                        "$ref": "#/components/responses/201_card_token_created"
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
                     }
                 },
                 "security": [
@@ -454,61 +454,29 @@
                     "message": "Missing required param: expiration_year. Please verify request parameters."
                 }
             },
-            "error_object_data": {
-                "title": "Root Type for 404_bad_request_data",
-                "description": "Dados de uma requisição inválida.",
-                "required": [
-                ],
-                "type": "object",
-                "properties": {
-                    "error": {
-                        "$ref": "#/components/schemas/error_data",
-                        "description": "Objeto contendo os detalhes do erro.",
-                        "properties": {
-                            "status": {
-                                "type": "string"
-                            },
-                            "status_code": {
-                                "format": "int32",
-                                "type": "integer"
-                            },
-                            "type": {
-                                "type": "string"
-                            },
-                            "category": {
-                                "type": "string"
-                            },
-                            "message": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "example": {
-                    "error": {
-                        "status": "Bad Request",
-                        "status_code": 400,
-                        "type": "invalid_request_error",
-                        "category": "missing_required_param",
-                        "message": "Missing required param: expiration_year. Please verify request parameters."
-                    }
-                }
-            },
             "card_token_data": {
                 "title": "Root Type for card_token_data",
                 "description": "Dados de um token de cartão.",
                 "type": "object",
                 "properties": {
                     "id": {
+                        "description": "Identificador único para este objeto.",
                         "type": "string"
                     },
                     "resource": {
+                        "description": "Tipo do recurso.",
                         "type": "string"
                     },
                     "used": {
+                        "description": "Indica se o token foi ou não utilizado. tokens podem ser utilizados apenas 1 vez.",
                         "type": "boolean"
                     },
                     "type": {
+                        "description": "O tipo do token.",
+                        "enum": [
+                            "bankaccount",
+                            "card"
+                        ],
                         "type": "string"
                     },
                     "card": {
@@ -576,10 +544,12 @@
                     },
                     "created_at": {
                         "format": "date-time",
+                        "description": "W3C Datetime Format para a data de criação (yyyy-mm-ddThh:mm:ssZ).",
                         "type": "string"
                     },
                     "updated_at": {
                         "format": "date-time",
+                        "description": "W3C Datetime Format para a data da última atualização (yyyy-mm-ddThh:mm:ssZ).",
                         "type": "string"
                     }
                 },
@@ -621,40 +591,51 @@
                 "type": "object",
                 "properties": {
                     "id": {
+                        "description": "Identificador exclusivo para este cartão.",
                         "type": "string"
                     },
                     "resource": {
+                        "description": "Tipo do recurso.",
                         "type": "string"
                     },
                     "card_brand": {
+                        "description": "Bandeira do cartão.",
                         "type": "string"
                     },
                     "first4_digits": {
+                        "description": "Os primeiros quatro dígitos do cartão.",
                         "type": "string"
                     },
                     "expiration_month": {
+                        "description": "Mês de expiração do cartão.",
                         "type": "string"
                     },
                     "expiration_year": {
+                        "description": "Ano de expiração do cartão.",
                         "type": "string"
                     },
                     "holder_name": {
+                        "description": "Nome do portador, conforme impresso no cartão.",
                         "type": "string"
                     },
                     "is_active": {
+                        "description": "Indica se o cartão está ativo (_true_) ou foi desativado (_false_).",
                         "type": "boolean"
                     },
                     "is_valid": {
+                        "description": "Indica se o cartão é valido (_true_) ou foi desativado (_false_).",
                         "type": "boolean"
                     },
                     "is_verified": {
+                        "description": "Se um recurso de cartão foi ou não verificado.",
                         "type": "boolean"
                     },
                     "fingerprint": {
+                        "description": "Todo cartão tem um atributo de impressão digital que pode ser usado para identificar de forma exclusiva um número de cartão particular.",
                         "type": "string"
                     },
                     "verification_checklist": {
-                        "type": "object",
+                        "$ref": "#/components/schemas/verification_checklist_data",
                         "properties": {
                             "postal_code_check": {
                                 "type": "string"
@@ -668,14 +649,17 @@
                         }
                     },
                     "metadata": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/metadata_data",
+                        "description": ""
                     },
                     "created_at": {
                         "format": "date-time",
+                        "description": "W3C Datetime Format para a data de criação (yyyy-mm-ddThh:mm:ssZ).",
                         "type": "string"
                     },
                     "updated_at": {
                         "format": "date-time",
+                        "description": "W3C Datetime Format para a data da última atualização (yyyy-mm-ddThh:mm:ssZ).",
                         "type": "string"
                     }
                 },
@@ -701,6 +685,86 @@
                     },
                     "created_at": "2019-05-06T11:33:45+00:00",
                     "updated_at": "2019-05-06T11:33:45+00:00"
+                }
+            },
+            "metadata_data": {
+                "title": "Root Type for metadata_data",
+                "description": "Mapeamento de chaves de string para valores de sequência de caracteres.",
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "description": "Identificador para os metadados (máximo de 30 caracteres).",
+                        "type": "string"
+                    },
+                    "value": {
+                        "description": "Informação a ser armazenada como metadados.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "key": "foo",
+                    "value": "bar"
+                }
+            },
+            "verification_checklist_data": {
+                "title": "Root Type for verification_checklist_data",
+                "description": "Dados do checklist de verificação.",
+                "type": "object",
+                "properties": {
+                    "postal_code_check": {
+                        "description": "Checagem do código postal.",
+                        "type": "string"
+                    },
+                    "security_code_check": {
+                        "description": "Checagem do código de segurança.",
+                        "type": "string"
+                    },
+                    "address_line1_check": {
+                        "description": "Checagem da primeira linha do endereço.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "postal_code_check": "unchecked",
+                    "security_code_check": "unchecked",
+                    "address_line1_check": "unchecked"
+                }
+            },
+            "error_object_data": {
+                "description": "Dados de uma requisição inválida.",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/error_data",
+                        "description": "Objeto contendo os detalhes do erro.",
+                        "properties": {
+                            "status": {
+                                "type": "string"
+                            },
+                            "status_code": {
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "category": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "error": {
+                        "status": "Bad Request",
+                        "status_code": 400,
+                        "type": "invalid_request_error",
+                        "category": "missing_required_param",
+                        "message": "Missing required param: expiration_year. Please verify request parameters."
+                    }
                 }
             }
         },
@@ -837,7 +901,7 @@
         },
         {
             "name": "API de Meios de Pagamento",
-            "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos.\n\nAtravés de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (confirgurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras.\n\nAqui não limitamos a sua criatividade!"
+            "description": "A presente API (Meios de Pagamento), visa empoderar o usuário com soluções on-line e off-line para gestão de contas digitais, emissão de cobranças (por boleto e cartão) e conciliação de pagamentos.\n\nAtravés de nossas soluções você poderá implementar soluções de pagamento para o seu Marketplace (configurando regras de split personalizadas), criar novos produtos para sua fintech (possibilitado a gestão de contas digitais integradas à CIP), ou ainda turbinar o seu ERP com funcionalidades financeiras.\n\nAqui não limitamos a sua criatividade!\n\n---\n\n[Termos de Uso da API de Meios de Pagamento](https://docs.unbanked.com.br/termos-de-uso-api-meios-de-pagamento.pdf)"
         },
         {
             "name": "Cartões",
