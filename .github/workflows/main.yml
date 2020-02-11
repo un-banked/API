@@ -12,6 +12,6 @@ jobs:
       with:
         repo-token: '${{ secrets.GITHUB_TOKEN }}'
         readme-api-id: '${{ secrets.README_API_ID }}'
-        api-file-path: 'api.json'
+        api-file-path: './api.json'
         readme-api-key: '${{ secrets.README_API_KEY }}'
         readme-api-version: '1.0'
