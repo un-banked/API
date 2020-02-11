@@ -1,0 +1,17 @@
+name: Sync to ReadMe
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: readmeio/github-readme-sync@1.0.1
+      with:
+        repo-token: '${{ secrets.GITHUB_TOKEN }}'
+        readme-api-id: '${{ secrets.README_API_ID }}'
+        api-file-path: 'api.json'
+        readme-api-key: '${{ secrets.README_API_KEY }}'
+        readme-api-version: '1.0'
