@@ -53,6 +53,7 @@
 
                     }
                 ],
+                "operationId": "info",
                 "summary": "Detalhes da API",
                 "description": "Retorna informações básicas da API, como nome, ambiente e versão fazendo também uma checagem básica da saúde da API, com validação de status dos serviços e servidores.\r\n\r\nPara informações mais detalhadas recomendamos acessar nossas páginas de Status:\r\n\r\n[Simplificado](https://status.unbanked.com.br)\r\n\r\n[Detalhado](https://statuspage.freshping.io/8685-unbanked)"
             }
@@ -61,6 +62,7 @@
             "description": "",
             "post": {
                 "requestBody": {
+                    "description": "E-mail e senha do usuário na plataforma Unbanked.",
                     "content": {
                         "application/json": {
                             "schema": {
@@ -101,8 +103,17 @@
                             }
                         },
                         "description": "Loga o usuário na API e retorna um token de autenticação."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request_auth"
                     }
                 },
+                "security": [
+                    {
+
+                    }
+                ],
+                "operationId": "auth_login",
                 "summary": "Logar na API",
                 "description": "Autentica um parceiro por meio de email e senha. Retorna um `token` a ser usado em todos os requests restritos. O token expira em 1 (uma) hora. O token retornado deve ser utilizado nos endpoints que requerem autentificação, utilizando o header `x-unbanked-token`, desta forma: `x-unbanked-token: token`"
             }
@@ -111,8 +122,12 @@
             "description": "",
             "post": {
                 "requestBody": {
+                    "description": "E-mail do usuário na plataforma Unbanked.",
                     "content": {
                         "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/reset_login_data"
+                            },
                             "examples": {
                                 "E-mail para Recuperação": {
                                     "value": {
@@ -131,6 +146,9 @@
                     "202": {
                         "content": {
                             "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/message_data"
+                                },
                                 "examples": {
                                     "Sucesso": {
                                         "value": {
@@ -141,8 +159,17 @@
                             }
                         },
                         "description": "Envia um e-mail para o usuário redefinir a sua senha."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request_auth_reset"
                     }
                 },
+                "security": [
+                    {
+
+                    }
+                ],
+                "operationId": "auth_reset_password",
                 "summary": "Recuperar Senha",
                 "description": "Envia uma requisição para recuperação da senha do usuário. O e-mail informado receberá, caso o usuário exista na base de dados, um e-mail com um link para troca de senha."
             }
@@ -150,10 +177,22 @@
         "/v1/cards/tokens": {
             "post": {
                 "requestBody": {
+                    "description": "Dados do cartão a ser tokenizado.",
                     "content": {
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/card_data"
+                            },
+                            "examples": {
+                                "Dados do Cartão": {
+                                    "value": {
+                                        "holder_name": "Test Tester",
+                                        "card_number": "4539003370725497",
+                                        "security_code": "123",
+                                        "expiration_month": "10",
+                                        "expiration_year": "2025"
+                                    }
+                                }
                             }
                         }
                     },
@@ -179,6 +218,7 @@
                         ]
                     }
                 ],
+                "operationId": "create_card_token",
                 "summary": "Tokenizar um novo cartão",
                 "description": "Cria um novo token de cartão, que poderá ser vinculado a um comprador ou então utilizado diretamente (uma única vez)."
             }
@@ -208,6 +248,9 @@
                     "200": {
                         "content": {
                             "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/card_status_data"
+                                },
                                 "examples": {
                                     "Cartão Tokenizado": {
                                         "value": {
@@ -253,6 +296,7 @@
                         ]
                     }
                 ],
+                "operationId": "get_card",
                 "summary": "Recuperar dados de um cartão tokenizado",
                 "description": "Recupera os dados de um cartão previamente tokenizado."
             },
@@ -280,6 +324,9 @@
                     "200": {
                         "content": {
                             "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/deleted_card_data"
+                                },
                                 "examples": {
                                     "Cartão Deletado": {
                                         "value": {
@@ -306,6 +353,7 @@
                         ]
                     }
                 ],
+                "operationId": "delete_card",
                 "summary": "Remover um cartão previamente cadastrado",
                 "description": "Remove permanentemente as informações de um cartão previamente cadastrado."
             }
@@ -316,6 +364,13 @@
             "card_data": {
                 "title": "Root Type for card_data",
                 "description": "Dados do Cartão",
+                "required": [
+                    "card_number",
+                    "expiration_month",
+                    "expiration_year",
+                    "holder_name",
+                    "security_code"
+                ],
                 "type": "object",
                 "properties": {
                     "holder_name": {
@@ -422,6 +477,13 @@
             "error_data": {
                 "title": "Root Type for error_data",
                 "description": "Dados de um erro.",
+                "required": [
+                    "category",
+                    "message",
+                    "status",
+                    "status_code",
+                    "type"
+                ],
                 "type": "object",
                 "properties": {
                     "status": {
@@ -457,6 +519,15 @@
             "card_token_data": {
                 "title": "Root Type for card_token_data",
                 "description": "Dados de um token de cartão.",
+                "required": [
+                    "card",
+                    "created_at",
+                    "id",
+                    "used",
+                    "updated_at",
+                    "type",
+                    "resource"
+                ],
                 "type": "object",
                 "properties": {
                     "id": {
@@ -588,6 +659,23 @@
             "card_status_data": {
                 "title": "Root Type for card_status_data",
                 "description": "Dados de status de cartão.",
+                "required": [
+                    "card_brand",
+                    "created_at",
+                    "expiration_month",
+                    "expiration_year",
+                    "fingerprint",
+                    "first4_digits",
+                    "holder_name",
+                    "id",
+                    "is_active",
+                    "is_valid",
+                    "is_verified",
+                    "metadata",
+                    "resource",
+                    "updated_at",
+                    "verification_checklist"
+                ],
                 "type": "object",
                 "properties": {
                     "id": {
@@ -709,6 +797,11 @@
             "verification_checklist_data": {
                 "title": "Root Type for verification_checklist_data",
                 "description": "Dados do checklist de verificação.",
+                "required": [
+                    "address_line1_check",
+                    "postal_code_check",
+                    "security_code_check"
+                ],
                 "type": "object",
                 "properties": {
                     "postal_code_check": {
@@ -732,6 +825,9 @@
             },
             "error_object_data": {
                 "description": "Dados de uma requisição inválida.",
+                "required": [
+                    "error"
+                ],
                 "type": "object",
                 "properties": {
                     "error": {
@@ -765,6 +861,106 @@
                         "category": "missing_required_param",
                         "message": "Missing required param: expiration_year. Please verify request parameters."
                     }
+                }
+            },
+            "auth_error_object_data": {
+                "title": "Root Type for auth_error_data",
+                "description": "Dados padrões do erro de autenticação.",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "$ref": "#/components/schemas/auth_error_data",
+                        "properties": {
+                            "code": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "error": {
+                        "code": "auth/user-not-found",
+                        "message": "There is no user record corresponding to this identifier. The user may have been deleted."
+                    }
+                }
+            },
+            "auth_error_data": {
+                "title": "Root Type for auth_error_data",
+                "description": "Dados do erro de autenticação.",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "description": "Código do erro.",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "Mensagem do erro.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "code": "auth/user-not-found",
+                    "message": "There is no user record corresponding to this identifier. The user may have been deleted."
+                }
+            },
+            "reset_login_data": {
+                "title": "Root Type for login_data",
+                "description": "Dados de Reset do Login.",
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "description": "E-mail do usuário na plataforma Unbanked.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "email": "you@mail.com"
+                }
+            },
+            "message_data": {
+                "title": "Root Type for message_data",
+                "description": "Dados da mensagem.",
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "description": "Mensagem da resposta.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "message": "Link to Reset Password Sent"
+                }
+            },
+            "deleted_card_data": {
+                "title": "Root Type for deleted_card_data",
+                "description": "Informações do cartão deletado.",
+                "required": [
+                    "deleted",
+                    "id",
+                    "resource"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "ID do cartão deletado.",
+                        "type": "string"
+                    },
+                    "resource": {
+                        "description": "Tipo de recurso.",
+                        "type": "string"
+                    },
+                    "deleted": {
+                        "description": "Indica se o cartão foi deletado.",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "id": "02ec41795637446d805b6795b3b3331e",
+                    "resource": "card",
+                    "deleted": true
                 }
             }
         },
@@ -818,6 +1014,9 @@
             "404_not_found": {
                 "content": {
                     "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/error_object_data"
+                        },
                         "examples": {
                             "Recurso não Encontrado": {
                                 "value": {
@@ -879,6 +1078,54 @@
                     }
                 },
                 "description": "Retorna o token criado."
+            },
+            "400_bad_request_auth": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/auth_error_object_data"
+                        },
+                        "examples": {
+                            "Usuário não encontrado": {
+                                "value": {
+                                    "error": {
+                                        "code": "auth/user-not-found",
+                                        "message": "There is no user record corresponding to this identifier. The user may have been deleted."
+                                    }
+                                }
+                            },
+                            "Senha inválida": {
+                                "value": {
+                                    "error": {
+                                        "code": "auth/wrong-password",
+                                        "message": "The password is invalid or the user does not have a password."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Requisição inválida."
+            },
+            "400_bad_request_auth_reset": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/auth_error_object_data"
+                        },
+                        "examples": {
+                            "Usuário não encontrado": {
+                                "value": {
+                                    "error": {
+                                        "code": "auth/user-not-found",
+                                        "message": "There is no user record corresponding to this identifier. The user may have been deleted."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Requisição inválida."
             }
         },
         "securitySchemes": {
