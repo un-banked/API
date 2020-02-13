@@ -300,6 +300,81 @@
                 "summary": "Recuperar dados de um cartão tokenizado",
                 "description": "Recupera os dados de um cartão previamente tokenizado."
             },
+            "post": {
+                "requestBody": {
+                    "description": "Dados do token e do comprador.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/link_card_to_buyer_data"
+                            },
+                            "examples": {
+                                "Dados": {
+                                    "value": {
+                                        "token": "3012a31a10153e28ba71524131252018",
+                                        "buyer": "1187r3rgthe85628va1b9fecfccc109a"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Cartões"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/card_status_data"
+                                },
+                                "examples": {
+                                    "Sucesso": {
+                                        "value": {
+                                            "id": "8f76c317f27b4cbd8247cc42d70618cd",
+                                            "resource": "card",
+                                            "card_brand": "Visa",
+                                            "first4_digits": "4929",
+                                            "expiration_month": "9",
+                                            "expiration_year": "2020",
+                                            "holder_name": "TEST MC TESTER",
+                                            "is_active": false,
+                                            "is_valid": true,
+                                            "is_verified": false,
+                                            "fingerprint": "5c63dfe5921ccbc6195e8355aa965c1e6c552f74b96669dafec9addc2bfe1ea9",
+                                            "verification_checklist": {
+                                                "postal_code_check": "unchecked",
+                                                "security_code_check": "unchecked",
+                                                "address_line1_check": "unchecked"
+                                            },
+                                            "metadata": {
+
+                                            },
+                                            "created_at": "2019-05-06T11:33:45+00:00",
+                                            "updated_at": "2019-05-06T11:33:45+00:00"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados do cartão vinculado com sucesso."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    }
+                },
+                "operationId": "link_card_to_buyer",
+                "summary": "Associar cartão à comprador",
+                "description": "Associa um cartão previamente tokenizado a carteira de um comprador."
+            },
             "delete": {
                 "tags": [
                     "Cartões"
@@ -357,6 +432,76 @@
                 "summary": "Remover um cartão previamente cadastrado",
                 "description": "Remove permanentemente as informações de um cartão previamente cadastrado."
             }
+        },
+        "/v1/buyers": {
+
+        },
+        "/v1/buyers/{buyerId}/cards/{cardId}": {
+            "post": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/buyer_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados alterados do comprador."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    }
+                },
+                "security": [
+                    {
+                        "Token": [
+                        ]
+                    }
+                ],
+                "operationId": "update_buyer_card",
+                "summary": "Atualizar cartão padrão do comprador",
+                "description": "Atualiza o cartão padrão da carteira de um comprador."
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Comprador de Exemplo": {
+                            "value": "005846dadde34e28ba7b9fecfccc989a"
+                        }
+                    },
+                    "name": "buyerId",
+                    "description": "Identificador do comprador.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "Cartão de Exemplo": {
+                            "value": "658016dadde3563rda7b9fecfccas45g"
+                        }
+                    },
+                    "name": "cardId",
+                    "description": "Identificador do cartão.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/transactions": {
+
         }
     },
     "components": {
@@ -405,6 +550,10 @@
             "login_data": {
                 "title": "Root Type for login_data",
                 "description": "Dados de Login",
+                "required": [
+                    "email",
+                    "password"
+                ],
                 "type": "object",
                 "properties": {
                     "email": {
@@ -424,6 +573,12 @@
             "token_data": {
                 "title": "Root Type for token_data",
                 "description": "Dados do Token",
+                "required": [
+                    "authTime",
+                    "expirationTime",
+                    "issuedAtTime",
+                    "token"
+                ],
                 "type": "object",
                 "properties": {
                     "token": {
@@ -453,6 +608,11 @@
             "api_data": {
                 "title": "Root Type for api_data",
                 "description": "Dados da API",
+                "required": [
+                    "env",
+                    "name",
+                    "version"
+                ],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -758,7 +918,7 @@
                     "first4_digits": "4929",
                     "expiration_month": "9",
                     "expiration_year": "2020",
-                    "holder_name": "ZOOP SQUAD QA",
+                    "holder_name": "TEST MC TESTER",
                     "is_active": false,
                     "is_valid": true,
                     "is_verified": false,
@@ -866,6 +1026,9 @@
             "auth_error_object_data": {
                 "title": "Root Type for auth_error_data",
                 "description": "Dados padrões do erro de autenticação.",
+                "required": [
+                    "error"
+                ],
                 "type": "object",
                 "properties": {
                     "error": {
@@ -890,6 +1053,10 @@
             "auth_error_data": {
                 "title": "Root Type for auth_error_data",
                 "description": "Dados do erro de autenticação.",
+                "required": [
+                    "code",
+                    "message"
+                ],
                 "type": "object",
                 "properties": {
                     "code": {
@@ -909,6 +1076,9 @@
             "reset_login_data": {
                 "title": "Root Type for login_data",
                 "description": "Dados de Reset do Login.",
+                "required": [
+                    "email"
+                ],
                 "type": "object",
                 "properties": {
                     "email": {
@@ -923,6 +1093,9 @@
             "message_data": {
                 "title": "Root Type for message_data",
                 "description": "Dados da mensagem.",
+                "required": [
+                    "message"
+                ],
                 "type": "object",
                 "properties": {
                     "message": {
@@ -961,6 +1134,243 @@
                     "id": "02ec41795637446d805b6795b3b3331e",
                     "resource": "card",
                     "deleted": true
+                }
+            },
+            "link_card_to_buyer_data": {
+                "title": "Root Type for link_card_to_buyer_data",
+                "description": "Dados do cartão e do comprador.",
+                "required": [
+                    "buyer",
+                    "token"
+                ],
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "description": "ID do Token.",
+                        "type": "string"
+                    },
+                    "buyer": {
+                        "description": "ID do comprador.",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "token": "3012a31a10153e28ba71524131252018",
+                    "buyer": "1187r3rgthe85628va1b9fecfccc109a"
+                }
+            },
+            "buyer_object_data": {
+                "title": "Root Type for buyer_object_data",
+                "description": "Dados do recurso \"Comprador\".",
+                "type": "object",
+                "allOf": [
+                    {
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/individual_object_data"
+                    }
+                ]
+            },
+            "address_data": {
+                "title": "Root Type for address_data",
+                "description": "Dados de endereço.",
+                "required": [
+                    "city",
+                    "country_code",
+                    "line1",
+                    "line2",
+                    "neighborhood",
+                    "postal_code",
+                    "state"
+                ],
+                "type": "object",
+                "properties": {
+                    "line1": {
+                        "description": "Logradouro.",
+                        "type": "string"
+                    },
+                    "line2": {
+                        "description": "Nº",
+                        "type": "string"
+                    },
+                    "line3": {
+                        "description": "Complemento.",
+                        "type": "string"
+                    },
+                    "neighborhood": {
+                        "description": "Bairro.",
+                        "type": "string"
+                    },
+                    "city": {
+                        "description": "Cidade;",
+                        "type": "string"
+                    },
+                    "state": {
+                        "description": "Estado (UF).",
+                        "type": "string"
+                    },
+                    "postal_code": {
+                        "description": "CEP.",
+                        "type": "string"
+                    },
+                    "country_code": {
+                        "description": "Código do País",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "line1": "Avenida Legal",
+                    "line2": "123",
+                    "line3": "AP 3",
+                    "neighborhood": "Barra da Lapa",
+                    "city": "Rio de Janeiro",
+                    "state": "RJ",
+                    "postal_code": "22845056",
+                    "country_code": "BR"
+                }
+            },
+            "individual_object_data": {
+                "title": "Root Type for buyer_object_data",
+                "description": "Dados do recurso \"Indivíduo\".",
+                "required": [
+                    "address",
+                    "account_balance",
+                    "created_at",
+                    "current_balance",
+                    "email",
+                    "first_name",
+                    "id",
+                    "last_name",
+                    "phone_number",
+                    "status",
+                    "resource",
+                    "taxpayer_id",
+                    "updated_at"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Identificador.",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Situação.",
+                        "type": "string"
+                    },
+                    "resource": {
+                        "description": "Tipo do recurso.",
+                        "type": "string"
+                    },
+                    "account_balance": {
+                        "description": "Saldo da conta.",
+                        "type": "string"
+                    },
+                    "current_balance": {
+                        "description": "Saldo atual.",
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "description": "Nome.",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "description": "Sobrenome.",
+                        "type": "string"
+                    },
+                    "taxpayer_id": {
+                        "description": "CPF.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "E-mail.",
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "description": "Número do telefone.",
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#/components/schemas/address_data",
+                        "properties": {
+                            "line1": {
+                                "type": "string"
+                            },
+                            "line2": {
+                                "type": "string"
+                            },
+                            "line3": {
+                                "type": "string"
+                            },
+                            "neighborhood": {
+                                "type": "string"
+                            },
+                            "city": {
+                                "type": "string"
+                            },
+                            "state": {
+                                "type": "string"
+                            },
+                            "postal_code": {
+                                "type": "string"
+                            },
+                            "country_code": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "payment_methods": {
+                        "description": "Métodos de pagamento.",
+                        "type": "string"
+                    },
+                    "default_debit": {
+                        "description": "Cartão padrão da carteira.",
+                        "type": "string"
+                    },
+                    "default_credit": {
+                        "description": "Conta bancária padrão.",
+                        "type": "string"
+                    },
+                    "metadata": {
+                        "$ref": "#/components/schemas/metadata_data"
+                    },
+                    "created_at": {
+                        "format": "date-time",
+                        "description": "W3C Datetime Format para a data de criação (yyyy-mm-ddThh:mm:ssZ).",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date-time",
+                        "description": "W3C Datetime Format para a data da última atualização (yyyy-mm-ddThh:mm:ssZ).",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "ab4f24fea4d641d89776f42e2800f9f8",
+                    "status": "active",
+                    "resource": "buyer",
+                    "account_balance": "0.00",
+                    "current_balance": "0.00",
+                    "first_name": "Cliente Fulano",
+                    "taxpayer_id": "11836128770",
+                    "email": "cliente.fulano@mail.com",
+                    "address": {
+                        "line1": "Avenida Legal",
+                        "line2": "244",
+                        "line3": "AP 1",
+                        "neighborhood": "Barra da Tijuca",
+                        "city": "Rio de Janeiro",
+                        "state": "RJ",
+                        "postal_code": "22845046",
+                        "country_code": "BR"
+                    },
+                    "default_debit": "a89bd5a20e334da1aa49b9e85033b1cb",
+                    "default_credit": "a89bd5a20e334da1aa49b9e85033b1cb",
+                    "metadata": {
+
+                    },
+                    "created_at": "2018-10-18T17:49:54+00:00",
+                    "updated_at": "2018-10-18T17:49:54+00:00"
                 }
             }
         },
@@ -1137,6 +1547,12 @@
             }
         }
     },
+    "security": [
+        {
+            "Token": [
+            ]
+        }
+    ],
     "tags": [
         {
             "name": "Informações",
@@ -1153,6 +1569,14 @@
         {
             "name": "Cartões",
             "description": "Essa sessão permite o gerenciamento de cartões e clientes dentro da plataforma da **un_banked**. A criação de transações de  e-commerce com cartões de crédito pode ser realizada através de 4 fluxos distintos. Cada fluxo é indicado para um modelo diferente de negócio. Veja abaixo cada um deles e escolha o modo no qual você se encaixa melhor.\n\n- **tokens descartáveis**: Indicado para os quem não possue as certificações de segurança necessárias para ter os dados de cartões de crédito/débito trafegando em seus servidores, a passagem dos dados do cartão para a API é realizada diretamente do navegador e/ou do aplicativo rodando na dispositivo móvel do comprador. Os tokens descartáveis só podem ser utilizados para uma única transação. Uma vez utilizado, descarta-se o token e nenhuma outra operação poderá ser realizada com o mesmo identificador.\n- **cartão padrão da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem um único cartão para compras futuras, modelo muito conhecido no e-commerce como One-Click Buy.\n- **outros cartões da carteira digital do comprador**: Indicado para os que desejam permitir que os seus compradores armazenem não apenas um, mas vários cartões para compras futuras, permitindo a escolha de qual cartão ele prefere ser cobrado na hora da venda.\n- **cartão não tokenizado**: Indicado para os que possuem certificação PCI-DSS e desejam trabalhar num modelo de integração sem tokenização de cartões e nem associação com compradores.\n\n**Nunca, em nenhuma hipótese, armazene o código verificador e nem o número descriptografado do cartão do seu cliente. Além de proibido pelas normas internacionais de segurança da indústria de pagamentos com cartões, isso também gera uma brecha de segurança e, em caso de vazamento de informações, processos jurídicos e multas financeiras.**"
+        },
+        {
+            "name": "Compradores",
+            "description": "Dentre os recursos principais da nossa API está o comprador (recurso que poderá ser debitados).\n\nO objeto/recurso comprador (buyer) é usado para administrar os compradores, bem como para permitir reembolsos, assinaturas, inserir detalhes do cartão de crédito para um comprador, editar detalhes e, claro, fazer transações."
+        },
+        {
+            "name": "Transações",
+            "description": "As transações são utilizadas para gerir valores pela plataforma. Uma transação pode envolver: boleto, cartão, conta digital e conta bancária."
         }
     ],
     "x-tagGroups": [
@@ -1172,7 +1596,9 @@
             "name": "Meios de Pagamento",
             "tags": [
                 "API de Meios de Pagamento",
-                "Cartões"
+                "Transações",
+                "Cartões",
+                "Compradores"
             ]
         }
     ]
