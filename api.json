@@ -212,12 +212,6 @@
                         "$ref": "#/components/responses/401_unauthorized"
                     }
                 },
-                "security": [
-                    {
-                        "Token": [
-                        ]
-                    }
-                ],
                 "operationId": "create_card_token",
                 "summary": "Tokenizar um novo cartão",
                 "description": "Cria um novo token de cartão, que poderá ser vinculado a um comprador ou então utilizado diretamente (uma única vez)."
@@ -290,12 +284,6 @@
                         "$ref": "#/components/responses/404_not_found"
                     }
                 },
-                "security": [
-                    {
-                        "Token": [
-                        ]
-                    }
-                ],
                 "operationId": "get_card",
                 "summary": "Recuperar dados de um cartão tokenizado",
                 "description": "Recupera os dados de um cartão previamente tokenizado."
@@ -400,7 +388,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/deleted_card_data"
+                                    "$ref": "#/components/schemas/deleted_data"
                                 },
                                 "examples": {
                                     "Cartão Deletado": {
@@ -434,7 +422,90 @@
             }
         },
         "/v1/buyers": {
+            "post": {
+                "requestBody": {
+                    "description": "Dados do comprador.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/individual_object_data"
+                            },
+                            "examples": {
+                                "Comprador de Exemplo": {
+                                    "value": {
+                                        "first_name": "Cliente Fulano",
+                                        "taxpayer_id": "11836128770",
+                                        "email": "cliente.fulano@mail.com",
+                                        "address": {
+                                            "line1": "Avenida Legal",
+                                            "line2": "244",
+                                            "line3": "AP 1",
+                                            "neighborhood": "Barra da Tijuca",
+                                            "city": "Rio de Janeiro",
+                                            "state": "RJ",
+                                            "postal_code": "22845046",
+                                            "country_code": "BR"
+                                        },
+                                        "metadata": {
 
+                                        },
+                                        "created_at": "2018-10-18T17:49:54+00:00",
+                                        "updated_at": "2018-10-18T17:49:54+00:00"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                },
+                                "examples": {
+                                    "Dados do Comprador": {
+                                        "value": {
+                                            "id": "ab4f24fea4d641d89776f42e2800f9f8",
+                                            "status": "active",
+                                            "resource": "buyer",
+                                            "account_balance": "0.00",
+                                            "current_balance": "0.00",
+                                            "first_name": "Cliente Fulano",
+                                            "taxpayer_id": "11836128770",
+                                            "email": "cliente.fulano@mail.com",
+                                            "address": {
+                                                "line1": "Avenida Legal",
+                                                "line2": "244",
+                                                "line3": "AP 1",
+                                                "neighborhood": "Barra da Tijuca",
+                                                "city": "Rio de Janeiro",
+                                                "state": "RJ",
+                                                "postal_code": "22845046",
+                                                "country_code": "BR"
+                                            },
+                                            "metadata": {
+
+                                            },
+                                            "created_at": "2018-10-18T17:49:54+00:00",
+                                            "updated_at": "2018-10-18T17:49:54+00:00"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados do comprador criado."
+                    }
+                },
+                "operationId": "create_buyer",
+                "summary": "Criar comprador",
+                "description": "Cria um novo comprador na plataforma."
+            }
         },
         "/v1/buyers/{buyerId}/cards/{cardId}": {
             "post": {
@@ -446,7 +517,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/buyer_object_data"
+                                    "$ref": "#/components/schemas/individual_object_data"
                                 }
                             }
                         },
@@ -459,15 +530,9 @@
                         "$ref": "#/components/responses/404_not_found"
                     }
                 },
-                "security": [
-                    {
-                        "Token": [
-                        ]
-                    }
-                ],
                 "operationId": "update_buyer_card",
-                "summary": "Atualizar cartão padrão do comprador",
-                "description": "Atualiza o cartão padrão da carteira de um comprador."
+                "summary": "Alterar cartão padrão do comprador",
+                "description": "Altera o cartão padrão da carteira de um comprador."
             },
             "parameters": [
                 {
@@ -502,6 +567,122 @@
         },
         "/v1/transactions": {
 
+        },
+        "/v1/transactions/cards": {
+
+        },
+        "/v1/transactions/{transactionId}": {
+
+        },
+        "/v1/transactions/{transactionId}/capture": {
+
+        },
+        "/v1/transactions/{transactionId}/void": {
+
+        },
+        "/v1/transactions/cards/buyer/{buyerId}": {
+
+        },
+        "/v1/transactions/cards/token/{tokenId}": {
+
+        },
+        "/v1/buyers/{buyerId}": {
+            "get": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os detalhes do comprador."
+                    }
+                },
+                "operationId": "get_buyer",
+                "summary": "Recuperar detalhes de comprador",
+                "description": "Recupera detalhes de um comprador."
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Informações atualizadas.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/individual_object_data"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados atualizados do comprador."
+                    }
+                },
+                "operationId": "update_buyer",
+                "summary": "Atualizar informações de comprador",
+                "description": "Atualiza as informações de um comprador."
+            },
+            "delete": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/deleted_data"
+                                },
+                                "examples": {
+                                    "Comprador deletado": {
+                                        "value": {
+                                            "id": "2278881b81f54a9787c2acb08732c607",
+                                            "resource": "buyer",
+                                            "deleted": true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna as confirmações de que o comprador foi deletado."
+                    }
+                },
+                "operationId": "remove_buyer",
+                "summary": "Remover comprador",
+                "description": "Remove o comprador determinado."
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Comprador de Exemplo": {
+                            "value": "005846dadde34e28ba7b9fecfccc989a"
+                        }
+                    },
+                    "name": "buyerId",
+                    "description": "Identificador do comprador.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         }
     },
     "components": {
@@ -1107,35 +1288,6 @@
                     "message": "Link to Reset Password Sent"
                 }
             },
-            "deleted_card_data": {
-                "title": "Root Type for deleted_card_data",
-                "description": "Informações do cartão deletado.",
-                "required": [
-                    "deleted",
-                    "id",
-                    "resource"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "description": "ID do cartão deletado.",
-                        "type": "string"
-                    },
-                    "resource": {
-                        "description": "Tipo de recurso.",
-                        "type": "string"
-                    },
-                    "deleted": {
-                        "description": "Indica se o cartão foi deletado.",
-                        "type": "boolean"
-                    }
-                },
-                "example": {
-                    "id": "02ec41795637446d805b6795b3b3331e",
-                    "resource": "card",
-                    "deleted": true
-                }
-            },
             "link_card_to_buyer_data": {
                 "title": "Root Type for link_card_to_buyer_data",
                 "description": "Dados do cartão e do comprador.",
@@ -1158,19 +1310,6 @@
                     "token": "3012a31a10153e28ba71524131252018",
                     "buyer": "1187r3rgthe85628va1b9fecfccc109a"
                 }
-            },
-            "buyer_object_data": {
-                "title": "Root Type for buyer_object_data",
-                "description": "Dados do recurso \"Comprador\".",
-                "type": "object",
-                "allOf": [
-                    {
-                        "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/individual_object_data"
-                    }
-                ]
             },
             "address_data": {
                 "title": "Root Type for address_data",
@@ -1235,18 +1374,11 @@
                 "description": "Dados do recurso \"Indivíduo\".",
                 "required": [
                     "address",
-                    "account_balance",
-                    "created_at",
-                    "current_balance",
                     "email",
                     "first_name",
-                    "id",
                     "last_name",
                     "phone_number",
-                    "status",
-                    "resource",
-                    "taxpayer_id",
-                    "updated_at"
+                    "taxpayer_id"
                 ],
                 "type": "object",
                 "properties": {
@@ -1371,6 +1503,219 @@
                     },
                     "created_at": "2018-10-18T17:49:54+00:00",
                     "updated_at": "2018-10-18T17:49:54+00:00"
+                }
+            },
+            "transaction_data": {
+                "title": "Root Type for transaction_data",
+                "description": "Dados de uma transação.",
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "currency": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "reference_id": {
+                        "type": "string"
+                    },
+                    "on_behalf_of": {
+                        "type": "string"
+                    },
+                    "customer": {
+                        "type": "string"
+                    },
+                    "payment_type": {
+                        "type": "string"
+                    },
+                    "payment_method": {
+                        "type": "object",
+                        "properties": {
+                            "expiration_date": {
+                                "format": "date",
+                                "type": "string"
+                            },
+                            "payment_limit_date": {
+                                "format": "date",
+                                "type": "string"
+                            },
+                            "body_instructions": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "billing_instructions": {
+                                "type": "object",
+                                "properties": {
+                                    "late_fee": {
+                                        "type": "object",
+                                        "properties": {
+                                            "mode": {
+                                                "type": "string"
+                                            },
+                                            "amount": {
+                                                "format": "int32",
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "interest": {
+                                        "type": "object",
+                                        "properties": {
+                                            "mode": {
+                                                "type": "string"
+                                            },
+                                            "amount": {
+                                                "format": "int32",
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "discount": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "mode": {
+                                                    "type": "string"
+                                                },
+                                                "limit_date": {
+                                                    "format": "date",
+                                                    "type": "string"
+                                                },
+                                                "amount": {
+                                                    "format": "int32",
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "source": {
+                        "type": "object",
+                        "properties": {
+                            "amount": {
+                                "type": "string"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "usage": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "card": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "installment_plan": {
+                                "type": "object",
+                                "properties": {
+                                    "mode": {
+                                        "type": "string"
+                                    },
+                                    "number_installments": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "amount": 300,
+                    "currency": "BRL",
+                    "description": "Venda de ingressos para o show do dia 30",
+                    "reference_id": "reference_5132",
+                    "on_behalf_of": "573e2aa71cb94ecda8dee14087327b48",
+                    "customer": "573e2aa71cb94ecda8dee14087327b48",
+                    "payment_type": "boleto",
+                    "payment_method": {
+                        "expiration_date": "2018-11-20",
+                        "payment_limit_date": "2018-11-20",
+                        "body_instructions": [
+                            "Pedido #5132"
+                        ],
+                        "billing_instructions": {
+                            "late_fee": {
+                                "mode": "FIXED",
+                                "amount": 500
+                            },
+                            "interest": {
+                                "mode": "DAILY_AMOUNT",
+                                "amount": 200
+                            },
+                            "discount": [
+                                {
+                                    "mode": "FIXED",
+                                    "limit_date": "2018-11-09",
+                                    "amount": 150
+                                },
+                                {
+                                    "mode": "FIXED",
+                                    "limit_date": "2018-11-10",
+                                    "amount": 100
+                                }
+                            ]
+                        }
+                    },
+                    "source": {
+                        "amount": "1",
+                        "currency": "BRL",
+                        "usage": "single_use",
+                        "type": "card",
+                        "card": {
+                            "id": "ed7dc65401154ae19f0715c0112453cf"
+                        },
+                        "installment_plan": {
+                            "mode": "with_interest",
+                            "number_installments": "1"
+                        }
+                    }
+                }
+            },
+            "card_transaction_data": {
+                "description": "Dados de transação com cartão.",
+                "type": "object"
+            },
+            "deleted_data": {
+                "title": "Root Type for deleted_card_data",
+                "description": "Informações do cartão deletado.",
+                "required": [
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Identificador do recurso deletado.",
+                        "type": "string"
+                    },
+                    "resource": {
+                        "description": "Tipo do recurso deletado.",
+                        "type": "string"
+                    },
+                    "deleted": {
+                        "description": "Indica se o recurso foi deletado.",
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "id": "02ec41795637446d805b6795b3b3331e",
+                    "resource": "card",
+                    "deleted": true
                 }
             }
         },
