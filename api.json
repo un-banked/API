@@ -53,7 +53,7 @@
 
                     }
                 ],
-                "operationId": "info",
+                "operationId": "api_info",
                 "summary": "Detalhes da API",
                 "description": "Retorna informações básicas da API, como nome, ambiente e versão fazendo também uma checagem básica da saúde da API, com validação de status dos serviços e servidores.\r\n\r\nPara informações mais detalhadas recomendamos acessar nossas páginas de Status:\r\n\r\n[Simplificado](https://status.unbanked.com.br)\r\n\r\n[Detalhado](https://statuspage.freshping.io/8685-unbanked)"
             }
@@ -421,7 +421,215 @@
                 "description": "Remove permanentemente as informações de um cartão previamente cadastrado."
             }
         },
-        "/v1/buyers": {
+        "/v1/buyers/{buyerId}/cards/{cardId}": {
+            "post": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados alterados do comprador."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    }
+                },
+                "operationId": "update_buyer_card",
+                "summary": "Alterar cartão padrão do comprador",
+                "description": "Altera o cartão padrão da carteira de um comprador."
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Comprador de Exemplo": {
+                            "value": "005846dadde34e28ba7b9fecfccc989a"
+                        }
+                    },
+                    "name": "buyerId",
+                    "description": "Identificador do comprador.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "Cartão de Exemplo": {
+                            "value": "658016dadde3563rda7b9fecfccas45g"
+                        }
+                    },
+                    "name": "cardId",
+                    "description": "Identificador do cartão.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/transactions": {
+
+        },
+        "/v1/transactions/cards": {
+
+        },
+        "/v1/transactions/{transactionId}": {
+
+        },
+        "/v1/transactions/{transactionId}/capture": {
+
+        },
+        "/v1/transactions/{transactionId}/void": {
+
+        },
+        "/v1/transactions/cards/buyer/{buyerId}": {
+
+        },
+        "/v1/transactions/cards/token/{tokenId}": {
+
+        },
+        "/v1/buyers/{buyerId}": {
+            "get": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os detalhes do comprador."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    }
+                },
+                "operationId": "get_buyer",
+                "summary": "Recuperar detalhes de comprador",
+                "description": "Recupera detalhes de um comprador."
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Informações atualizadas.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/individual_object_data"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/individual_object_data"
+                                }
+                            }
+                        },
+                        "description": "Retorna os dados atualizados do comprador."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    }
+                },
+                "operationId": "update_buyer",
+                "summary": "Atualizar informações de comprador",
+                "description": "Atualiza as informações de um comprador."
+            },
+            "delete": {
+                "tags": [
+                    "Compradores"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/deleted_data"
+                                },
+                                "examples": {
+                                    "Comprador deletado": {
+                                        "value": {
+                                            "id": "2278881b81f54a9787c2acb08732c607",
+                                            "resource": "buyer",
+                                            "deleted": true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Retorna as confirmações de que o comprador foi deletado."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404_not_found"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401_unauthorized"
+                    }
+                },
+                "operationId": "remove_buyer",
+                "summary": "Remover comprador",
+                "description": "Remove o comprador determinado."
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Comprador de Exemplo": {
+                            "value": "005846dadde34e28ba7b9fecfccc989a"
+                        }
+                    },
+                    "name": "buyerId",
+                    "description": "Identificador do comprador.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/v1/buyers/individual": {
+            "description": "",
             "post": {
                 "requestBody": {
                     "description": "Dados do comprador.",
@@ -500,189 +708,18 @@
                             }
                         },
                         "description": "Retorna os dados do comprador criado."
-                    }
-                },
-                "operationId": "create_buyer",
-                "summary": "Criar comprador",
-                "description": "Cria um novo comprador na plataforma."
-            }
-        },
-        "/v1/buyers/{buyerId}/cards/{cardId}": {
-            "post": {
-                "tags": [
-                    "Compradores"
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/individual_object_data"
-                                }
-                            }
-                        },
-                        "description": "Retorna os dados alterados do comprador."
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400_bad_request"
                     },
                     "401": {
                         "$ref": "#/components/responses/401_unauthorized"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/404_not_found"
                     }
                 },
-                "operationId": "update_buyer_card",
-                "summary": "Alterar cartão padrão do comprador",
-                "description": "Altera o cartão padrão da carteira de um comprador."
-            },
-            "parameters": [
-                {
-                    "examples": {
-                        "Comprador de Exemplo": {
-                            "value": "005846dadde34e28ba7b9fecfccc989a"
-                        }
-                    },
-                    "name": "buyerId",
-                    "description": "Identificador do comprador.",
-                    "schema": {
-                        "type": "string"
-                    },
-                    "in": "path",
-                    "required": true
-                },
-                {
-                    "examples": {
-                        "Cartão de Exemplo": {
-                            "value": "658016dadde3563rda7b9fecfccas45g"
-                        }
-                    },
-                    "name": "cardId",
-                    "description": "Identificador do cartão.",
-                    "schema": {
-                        "type": "string"
-                    },
-                    "in": "path",
-                    "required": true
-                }
-            ]
-        },
-        "/v1/transactions": {
-
-        },
-        "/v1/transactions/cards": {
-
-        },
-        "/v1/transactions/{transactionId}": {
-
-        },
-        "/v1/transactions/{transactionId}/capture": {
-
-        },
-        "/v1/transactions/{transactionId}/void": {
-
-        },
-        "/v1/transactions/cards/buyer/{buyerId}": {
-
-        },
-        "/v1/transactions/cards/token/{tokenId}": {
-
-        },
-        "/v1/buyers/{buyerId}": {
-            "get": {
-                "tags": [
-                    "Compradores"
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/individual_object_data"
-                                }
-                            }
-                        },
-                        "description": "Retorna os detalhes do comprador."
-                    }
-                },
-                "operationId": "get_buyer",
-                "summary": "Recuperar detalhes de comprador",
-                "description": "Recupera detalhes de um comprador."
-            },
-            "put": {
-                "requestBody": {
-                    "description": "Informações atualizadas.",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/individual_object_data"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "tags": [
-                    "Compradores"
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/individual_object_data"
-                                }
-                            }
-                        },
-                        "description": "Retorna os dados atualizados do comprador."
-                    }
-                },
-                "operationId": "update_buyer",
-                "summary": "Atualizar informações de comprador",
-                "description": "Atualiza as informações de um comprador."
-            },
-            "delete": {
-                "tags": [
-                    "Compradores"
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/deleted_data"
-                                },
-                                "examples": {
-                                    "Comprador deletado": {
-                                        "value": {
-                                            "id": "2278881b81f54a9787c2acb08732c607",
-                                            "resource": "buyer",
-                                            "deleted": true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Retorna as confirmações de que o comprador foi deletado."
-                    }
-                },
-                "operationId": "remove_buyer",
-                "summary": "Remover comprador",
-                "description": "Remove o comprador determinado."
-            },
-            "parameters": [
-                {
-                    "examples": {
-                        "Comprador de Exemplo": {
-                            "value": "005846dadde34e28ba7b9fecfccc989a"
-                        }
-                    },
-                    "name": "buyerId",
-                    "description": "Identificador do comprador.",
-                    "schema": {
-                        "type": "string"
-                    },
-                    "in": "path",
-                    "required": true
-                }
-            ]
+                "operationId": "create_buyer",
+                "summary": "Criar comprador (Pessoa Física)",
+                "description": "Cria um novo comprador na plataforma."
+            }
         }
     },
     "components": {
